@@ -35,4 +35,3 @@ g.addEdge(vertices[3], vertices[5],22);
 g.printGraph();
 
 console.log(Astar.aStar(vertices[0],vertices[5],g));
-
