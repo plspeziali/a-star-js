@@ -26,6 +26,10 @@ module.exports = class Graph {
         this.adjList.get(w).push({vertex: v, cost: c});
     }
 
+    getVertices(){
+        return Array.from(this.adjList.keys());
+    }
+
     getNeighbors(id){
         for (var i of this.adjList.keys()) {
             if(i.id == id){
