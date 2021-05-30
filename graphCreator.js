@@ -31,7 +31,7 @@ module.exports = {
             g.addEdge(vertices[firstNode], vertices[secondNode],cost);
         }
 
-        g.printGraph();
+        //g.printGraph();
 
         return g;
     }

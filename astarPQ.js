@@ -1,12 +1,14 @@
+const PriorityQueue = require('./priorityQueue');
+
 module.exports = {
     
     aStar(start, goal, graph){
-        var openSet = new Array();
-        openSet.push(start.id);//
         var cameFrom = new Map();//
         var gScore = new Map();//
         var fScore = new Map();//
-
+        var openSet = new PriorityQueue(fScore);
+        openSet.insert(start.id);//
+        
         for (let v of graph.adjList.keys()){//per ogni vertice che è nel grafo assegno una gScore Infinita
             gScore[v.id] = Infinity;
             fScore[v.id] = Infinity;
@@ -14,12 +16,13 @@ module.exports = {
 
         gScore[start.id] = 0;
         fScore[start.id] = goal.heuristic(start);
-        while(openSet.length !== 0){
-            current = module.exports.minKey(fScore, openSet);
-            if(current === goal.id){
+        while(openSet.size() !== 0){
+            current = openSet.extractMin();
+            //console.log("extract min: "+current);
+            if(current == goal.id){
                 return module.exports.reconstructPath(cameFrom, current)
-            }
-            openSet.splice(openSet.indexOf(current),1);
+            } 
+            //non ci serve più splice perchè c'è già extractmin
             let neighbors = graph.getNeighbors(current)
             for(let edge of neighbors){
                 neighbor = edge.vertex;
@@ -30,8 +33,8 @@ module.exports = {
                     cameFrom[neighbor.id] = current;
                     gScore[neighbor.id] = tentative_gScore;
                     fScore[neighbor.id] = gScore[neighbor.id] + goal.heuristic(neighbor);
-                    if(!openSet.includes(neighbor.id)){
-                        openSet.push(neighbor.id);
+                    if(!openSet.includes(neighbor.id)){ //includes è una ricerca lineare O(n)
+                        openSet.insert(neighbor.id);
                     }
                 }
                 //console.log("fscore: "+fScore[neighbor.id]);
